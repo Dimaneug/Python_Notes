@@ -4,6 +4,11 @@ from datetime import datetime
 fields = ['ID', 'Title', 'Body', 'Datetime']
 last_id = 1
 
+def get_last_id() -> int:
+    with open('notes.csv', 'r') as file:
+        last_line = file.readlines()[-1]
+        return int(last_line.split(';')[0])
+
 def add_note():
     title = input("Введите заголовок заметки: ")
     body = input("Введите тело заметки: ")
@@ -28,5 +33,3 @@ def edit_note():
 
 def delete_note():
     pass
-
-add_note()
