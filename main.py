@@ -25,6 +25,10 @@ def save_note(note: dict):
         writer = csv.DictWriter(file, fields, restval='Empty', delimiter=';')
         writer.writerows([note])
 
+def get_notes() -> csv.DictReader:
+    with open('notes.csv', 'r') as file:
+        return csv.DictReader(file)
+
 def read_note():
     pass
 
