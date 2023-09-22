@@ -56,6 +56,7 @@ def show_notes():
         else:
             if choice.isdigit():
                 read_note(choice, notes)
+                notes = get_notes()
 
 def read_note(note_id: str, notes: list):
     found_line = -1
@@ -68,7 +69,7 @@ def read_note(note_id: str, notes: list):
         return
     while 1:
         print(f"Заголовок: {note['Title']}")
-        print(f"Содержание: {note['Body']}")
+        print(f"Содержимое: {note['Body']}")
         print('e - изменить; d - удалить; q - закрыть')
         choice = input('Введите операцию: ')
         if choice == 'q':
@@ -78,11 +79,34 @@ def read_note(note_id: str, notes: list):
             print("Удаляем")
             break
         if choice == 'e':
-            edit_note()
+            edit_note(found_line, notes)
             print("Изменяем")
+            break
 
-def edit_note():
-    pass
+def edit_note(line_index: int, notes: list):
+    title = input("Новый заголовок: ")
+    body = input("Новое содержимое: ")
+    if title != '':
+        notes[line_index]['Title'] = title
+        notes[line_index]['Datetime'] = datetime.now().strftime('%Y-%m-%d, %H:%M')
+    if body != '':
+        notes[line_index]['Body'] = body
+        notes[line_index]['Datetime'] = datetime.now().strftime('%Y-%m-%d, %H:%M')
+    if title == '' and body == '':
+        return
+    while True:
+        choice = input('Сохранить изменения? (Y/n)')
+        if choice == 'n':
+            break;
+        if choice == 'Y':
+            update_notes(notes)
+            break
+
+def update_notes(notes: list):
+    with open('notes.csv', 'w') as file:
+        writer = csv.DictWriter(file, fields, restval='Empty', delimiter=';')
+        writer.writeheader()
+        writer.writerows(notes)
 
 def delete_note():
     pass
