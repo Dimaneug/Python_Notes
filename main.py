@@ -38,9 +38,10 @@ def show_notes():
     choice = ''
     cur = 0
     while choice != 'q':
-        if cur == len(notes):
+        if cur >= len(notes):
             cur = cur-5 if cur-5 > 0 else 0
         next_cur = cur+5 if cur+5 < len(notes) else len(notes) # Правая граница отображения
+        print('-'*20)
         for i in range(cur, next_cur):
             cur = next_cur
             note = notes[i]
@@ -75,12 +76,12 @@ def read_note(note_id: str, notes: list):
         if choice == 'q':
             break
         if choice == 'd':
-            delete_note()
-            print("Удаляем")
+            delete_note(found_line, notes)
+            print("Удаляем...")
             break
         if choice == 'e':
             edit_note(found_line, notes)
-            print("Изменяем")
+            print("Изменяем...")
             break
 
 def edit_note(line_index: int, notes: list):
@@ -108,5 +109,6 @@ def update_notes(notes: list):
         writer.writeheader()
         writer.writerows(notes)
 
-def delete_note():
-    pass
+def delete_note(line_num: int, notes: list):
+    notes.pop(line_num)
+    update_notes(notes)
