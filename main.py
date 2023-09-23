@@ -1,5 +1,6 @@
 import csv
 from datetime import datetime
+import os.path
 
 fields = ["ID", "Title", "Body", "Datetime"]
 
@@ -7,7 +8,11 @@ fields = ["ID", "Title", "Body", "Datetime"]
 def get_last_id() -> int:
     with open("notes.csv", "r") as file:
         last_line = file.readlines()[-1]
-        return int(last_line.split(";")[0])
+        try:
+            last_id = int(last_line.split(";")[0])
+        except:
+            last_id = 0
+        return last_id
 
 
 def add_note():
@@ -166,4 +171,9 @@ def ui():
 
 
 if __name__ == "__main__":
+    # Создадим файл для заметок, если его нет
+    if not os.path.isfile('notes.csv'):
+        with open("notes.csv", "w") as file:
+            writer = csv.DictWriter(file, fields, restval="Empty", delimiter=";")
+            writer.writeheader()
     ui()
